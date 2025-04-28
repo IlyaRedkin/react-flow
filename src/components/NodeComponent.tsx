@@ -14,7 +14,6 @@ export const NodeComponent: React.FC<NodeComponentProps> = ({ data }) => {
   const updateNode = useAutomationStore((s) => s.updateNode);
   const deleteNode = useAutomationStore((s) => s.deleteNode);
   const [edit, setEdit] = useState(false);
-    console.log('data node', data)
 
   const handleFieldChange = (fieldId: string, value: string) => {
     updateNode(data.id, (node) => ({
@@ -24,7 +23,6 @@ export const NodeComponent: React.FC<NodeComponentProps> = ({ data }) => {
   };
 
   const renderField = (field: ContentField) => {
-      console.log('renderField field', field)
     if (field.read_only) {
       return (
         <Typography key={field.id} variant="body2" color="text.secondary">

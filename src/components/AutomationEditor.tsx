@@ -70,7 +70,6 @@ export const AutomationEditor: React.FC = () => {
     setSelectedAutomation,
     automations,
   } = useAutomationStore();
-  console.log('nodes', nodes)
 
   useEffect(() => {
     loadAutomations();
@@ -137,7 +136,6 @@ export const AutomationEditor: React.FC = () => {
             position,
           };
 
-          console.log('newNode', newNode)
           addNode(newNode);
         }
       } catch (error) {

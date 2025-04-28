@@ -1,12 +1,12 @@
 import axios from 'axios';
-import { Automation } from '../types';
+import { Automation, ComponentTemplates } from '../types';
 
-const API_URL = 'https://mok-automate.rnd.flowai.ru';
+const API_URL = 'https://mok-automate.rnd.flowai.ru/api';
 
 export const automationService = {
   async getAutomations(): Promise<Automation[]> {
     const response = await axios.get(`${API_URL}/automations`);
-    return response.data;
+    return response.data.data;
   },
 
   async getAutomation(id: string): Promise<Automation> {
@@ -26,5 +26,10 @@ export const automationService = {
 
   async deleteAutomation(id: string): Promise<void> {
     await axios.delete(`${API_URL}/automations/${id}`);
+  },
+
+  async getComponentTemplates(): Promise<ComponentTemplates> {
+    const response = await axios.get(`${API_URL}/component-templates/`);
+    return response.data;
   },
 }; 

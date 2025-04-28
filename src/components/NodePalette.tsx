@@ -1,33 +1,44 @@
 import React from 'react';
 import { Box, Typography, Paper } from '@mui/material';
-
-const nodeTypes = [
-  {
-    type: 'condition',
-    label: 'Условия',
-    items: [
-      { type: 'duration', label: 'Длительность звонка' },
-      { type: 'date', label: 'Дата диалога' },
-      { type: 'marker', label: 'Маркер' },
-    ],
-  },
-  {
-    type: 'action',
-    label: 'Действия',
-    items: [{ type: 'agent', label: 'Выбор агента' }],
-  },
-];
+import { useAutomationStore } from '../store/useAutomationStore';
+import { ComponentTemplates } from '../types';
 
 export const NodePalette: React.FC = () => {
-  const onDragStart = (event: React.DragEvent, nodeType: string) => {
-    event.dataTransfer.setData('application/reactflow', nodeType);
+  const componentTemplates = useAutomationStore((state) => state.componentTemplates);
+
+  const onDragStart = (event: React.DragEvent, type: string) => {
+    event.dataTransfer.setData('application/reactflow', JSON.stringify({ type }));
     event.dataTransfer.effectAllowed = 'move';
+  };
+
+  const renderTemplateItems = (templates: ComponentTemplates) => {
+    return Object.entries(templates).map(([type, template]) => (
+      <Box
+        key={type}
+        draggable
+        onDragStart={(e) => onDragStart(e, type)}
+        sx={{
+          padding: 1,
+          marginBottom: 1,
+          backgroundColor: 'background.paper',
+          border: '1px solid',
+          borderColor: 'divider',
+          borderRadius: 1,
+          cursor: 'grab',
+          '&:hover': {
+            backgroundColor: 'action.hover',
+          },
+        }}
+      >
+        <Typography variant="body2">{template.description}</Typography>
+      </Box>
+    ));
   };
 
   return (
     <Paper
       sx={{
-        width: 200,
+        width: 240,
         padding: 2,
         position: 'absolute',
         left: 10,
@@ -35,34 +46,10 @@ export const NodePalette: React.FC = () => {
         zIndex: 1000,
       }}
     >
-      {nodeTypes.map((category) => (
-        <Box key={category.type} sx={{ mb: 2 }}>
-          <Typography variant="subtitle1" sx={{ mb: 1 }}>
-            {category.label}
-          </Typography>
-          {category.items.map((item) => (
-            <Box
-              key={item.type}
-              draggable
-              onDragStart={(e) => onDragStart(e, item.type)}
-              sx={{
-                padding: 1,
-                marginBottom: 1,
-                backgroundColor: 'background.paper',
-                border: '1px solid',
-                borderColor: 'divider',
-                borderRadius: 1,
-                cursor: 'grab',
-                '&:hover': {
-                  backgroundColor: 'action.hover',
-                },
-              }}
-            >
-              {item.label}
-            </Box>
-          ))}
-        </Box>
-      ))}
+      <Typography variant="subtitle1" sx={{ mb: 1 }}>
+        Компоненты
+      </Typography>
+      {renderTemplateItems(componentTemplates)}
     </Paper>
   );
 }; 
